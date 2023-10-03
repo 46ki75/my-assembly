@@ -1,18 +1,19 @@
 section .data
-hello db 'Hello, World!',0
+    hello db 'Hello, World!', 0   ; Null-terminated string to be printed
+    hello_len equ $ - hello        ; Compute the length of the string
 
 section .text
-    global _start
+    global _start                  ; Entry point for the program
 
 _start:
-    ; write(1, hello, 13)
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, hello
-    mov edx, 13
-    int 0x80
+    ; write(STDOUT, hello, hello_len)
+    mov rax, 1                     ; The syscall number for sys_write (1)
+    mov rdi, 1                     ; File descriptor STDOUT
+    mov rsi, hello                 ; Pointer to the string to be printed
+    mov rdx, hello_len             ; Length of the string
+    syscall                        ; Invoke syscall
 
     ; exit(0)
-    mov eax, 1
-    xor ebx, ebx
-    int 0x80
+    mov rax, 60                    ; The syscall number for sys_exit (60)
+    xor rdi, rdi                   ; Status 0
+    syscall                        ; Invoke syscall

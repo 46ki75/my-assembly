@@ -1,10 +1,15 @@
-all: my_program
+# ターゲット
+all: dist/my_program
 
+# オブジェクトファイルのビルド
 main.o: src/main.asm
-	nasm -f elf64 src/main.asm -o main.o
+	mkdir -p dist
+	nasm -f elf64 src/main.asm -o dist/main.o
 
-my_program: main.o
-	ld -o my_program main.o
+# 実行ファイルのビルド
+dist/my_program: main.o
+	ld -o dist/my_program dist/main.o
 
+# クリーンアップ
 clean:
-	rm -f main.o my_program
+	rm -f dist/main.o dist/my_program
